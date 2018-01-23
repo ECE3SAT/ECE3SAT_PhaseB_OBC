@@ -1,0 +1,7 @@
+.vscode/
+/BUILD/
+/mbed\-os/
+.mbed
+mbed-os.lib
+mbed_settings.py
+mbed_settings.pyc
