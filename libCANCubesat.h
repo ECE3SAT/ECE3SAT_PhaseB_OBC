@@ -4,7 +4,7 @@
 #include "classobc.h"
 #include "dataview-uniq.h"
 #include "obc.h"
-
+#include "Messagerie.h"
 
 #ifndef __USER_CODE_H_libcan__
 #define __USER_CODE_H_libcan__
@@ -44,7 +44,6 @@ void be_callback();
 void send_adcsstable();
 
 void send_obcorientationmode();
-
 
 
 
