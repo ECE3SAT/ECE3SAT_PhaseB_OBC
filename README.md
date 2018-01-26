@@ -15,7 +15,7 @@ You need to have an installed and configured [MbedCLI](https://os.mbed.com/docs/
 Use `mbed new .` to create a MBed project with all configurations and dependencies in ECE3SAT_PhaseB_OBC/ repository.
 
 You can now use mbed command to compile these files into a binary which can be flashed on your microcontroller (binary can be found 
-in <project_dir>/BUILD/<target_name>/<compiler_name>/). The compilation command has to be launched with some options (`$MC_TARGET` is the microcontroller targeted and `$COMPILER` is the compiler used) :
+in <project_dir>/BUILD/<target_name>/<compiler_name>/). The compilation command has to be launched with some [options](https://github.com/ARMmbed/mbed-cli#compiling-your-program) (`$MC_TARGET` is the microcontroller targeted and `$COMPILER` is the compiler used) :
 
 `mbed compile -m $MC_TARGET -t $COMPILER`
 
