@@ -27,6 +27,10 @@ class libCANCubesat
 
 void read_callback();
 
+void dataframe_handler(CANMessage msg);
+
+void remoteframe_handler(CANMessage msg);
+
 void transmitted_callback();
 
 void errorwarning_callback();
@@ -42,6 +46,8 @@ void al_callback();
 void be_callback();
 
 void send_adcsstable();
+
+void send_adcsstable_rtr();
 
 void send_obcorientationmode();
 

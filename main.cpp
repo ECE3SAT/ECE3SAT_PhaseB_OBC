@@ -25,6 +25,7 @@ void classobc_init()
 	    }*/
 
 	//ticker.attach(&send_adcsstable, 2);
+	//ticker.attach(&send_adcsstable_rtr, 2);
 
 	// when we use the attach function, deep sleep can't be enabled because the CAN device must be able to generate an interruption
 	can1.attach(&read_callback, CAN::RxIrq);		 // message received

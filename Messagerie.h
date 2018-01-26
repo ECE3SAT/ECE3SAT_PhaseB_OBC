@@ -12,14 +12,6 @@
 #include "libCANCubesat.h"
 #include "dataview-uniq.h"
 
-enum class ErrorStatusCaro
-{
-    Success,
-    NotEnoughData,
-    BufferOverflow,
-    InvalidMsgData
-};
-
 class MessageBase
 {
   public:
