@@ -25,11 +25,29 @@ class libCANCubesat
     virtual ~libCANCubesat();
 };
 
-void read_callback();
+void OBC_read_callback();
 
-void dataframe_handler(CANMessage msg);
+void OBC_dataframe_handler(CANMessage msg);
 
-void remoteframe_handler(CANMessage msg);
+void OBC_remoteframe_handler(CANMessage msg);
+
+void ADCS_read_callback();
+
+void ADCS_dataframe_handler(CANMessage msg);
+
+void ADCS_remoteframe_handler(CANMessage msg);
+
+void EDT_read_callback();
+
+void EDT_dataframe_handler(CANMessage msg);
+
+void EDT_remoteframe_handler(CANMessage msg);
+
+void TCS_read_callback();
+
+void TCS_dataframe_handler(CANMessage msg);
+
+void TCS_remoteframe_handler(CANMessage msg);
 
 void transmitted_callback();
 

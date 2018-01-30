@@ -5,9 +5,9 @@ Serial pc(USBTX, USBRX);
 CAN can1(PA_11, PA_12);
 DigitalOut led1(LED1);
 
-void read_callback()
+void OBC_read_callback()
 {
-	pc.printf("read_callback()\r\n");
+	pc.printf("OBC_read_callback()\r\n");
 	CANMessage msg;
 	int errorCode;
 	// 1.Declare a bit stream
@@ -24,16 +24,16 @@ void read_callback()
 		// 4 . Decode data
 		if (msg.type == CANData)
 		{
-			dataframe_handler(msg);
+			OBC_dataframe_handler(msg);
 		}
 		else if (msg.type == CANRemote)
 		{
-			remoteframe_handler(msg);
+			OBC_remoteframe_handler(msg);
 		}
 	}
 }
 
-void dataframe_handler(CANMessage msg)
+void OBC_dataframe_handler(CANMessage msg)
 {
 	switch (msg.id)
 	{
@@ -46,7 +46,167 @@ void dataframe_handler(CANMessage msg)
 	}
 }
 
-void remoteframe_handler(CANMessage msg)
+void OBC_remoteframe_handler(CANMessage msg)
+{
+	switch (msg.id)
+	{
+	case libCANCubesat::ADCS_is_stable:
+		send_adcsstable();
+		break;
+	case libCANCubesat::OBC_orientation_mode_command:
+		send_obcorientationmode();
+		break;
+	}
+}
+
+void ADCS_read_callback()
+{
+	pc.printf("ADCS_read_callback()\r\n");
+	CANMessage msg;
+	int errorCode;
+	// 1.Declare a bit stream
+	BitStream bitStrm;
+	// 2.Declare the stuct where the decoded data will be written
+
+	if (can1.read(msg))
+	{
+		// 3.Initialize bit stream
+		BitStream_AttachBuffer(&bitStrm, msg.data, 8);
+
+		led1 = !led1;
+
+		// 4 . Decode data
+		if (msg.type == CANData)
+		{
+			ADCS_dataframe_handler(msg);
+		}
+		else if (msg.type == CANRemote)
+		{
+			ADCS_remoteframe_handler(msg);
+		}
+	}
+}
+
+void ADCS_dataframe_handler(CANMessage msg)
+{
+	switch (msg.id)
+	{
+	case libCANCubesat::ADCS_is_stable:
+		MessageAdcsStable::FromCanBus(msg.data, msg.len);
+		break;
+		case libCANCubesat::OBC_orientation_mode_command:
+		MessageAdcsStable::FromCanBus(msg.data, msg.len);
+		break;
+	}
+}
+
+void ADCS_remoteframe_handler(CANMessage msg)
+{
+	switch (msg.id)
+	{
+	case libCANCubesat::ADCS_is_stable:
+		send_adcsstable();
+		break;
+	case libCANCubesat::OBC_orientation_mode_command:
+		send_obcorientationmode();
+		break;
+	}
+}
+void EDT_read_callback()
+{
+	pc.printf("EDT_read_callback()\r\n");
+	CANMessage msg;
+	int errorCode;
+	// 1.Declare a bit stream
+	BitStream bitStrm;
+	// 2.Declare the stuct where the decoded data will be written
+
+	if (can1.read(msg))
+	{
+		// 3.Initialize bit stream
+		BitStream_AttachBuffer(&bitStrm, msg.data, 8);
+
+		led1 = !led1;
+
+		// 4 . Decode data
+		if (msg.type == CANData)
+		{
+			EDT_dataframe_handler(msg);
+		}
+		else if (msg.type == CANRemote)
+		{
+			EDT_remoteframe_handler(msg);
+		}
+	}
+}
+
+void EDT_dataframe_handler(CANMessage msg)
+{
+	switch (msg.id)
+	{
+	case libCANCubesat::ADCS_is_stable:
+		MessageAdcsStable::FromCanBus(msg.data, msg.len);
+		break;
+		case libCANCubesat::OBC_orientation_mode_command:
+		MessageAdcsStable::FromCanBus(msg.data, msg.len);
+		break;
+	}
+}
+
+void EDT_remoteframe_handler(CANMessage msg)
+{
+	switch (msg.id)
+	{
+	case libCANCubesat::ADCS_is_stable:
+		send_adcsstable();
+		break;
+	case libCANCubesat::OBC_orientation_mode_command:
+		send_obcorientationmode();
+		break;
+	}
+}
+void TCS_read_callback()
+{
+	pc.printf("TCS_read_callback()\r\n");
+	CANMessage msg;
+	int errorCode;
+	// 1.Declare a bit stream
+	BitStream bitStrm;
+	// 2.Declare the stuct where the decoded data will be written
+
+	if (can1.read(msg))
+	{
+		// 3.Initialize bit stream
+		BitStream_AttachBuffer(&bitStrm, msg.data, 8);
+
+		led1 = !led1;
+
+		// 4 . Decode data
+		if (msg.type == CANData)
+		{
+			TCS_dataframe_handler(msg);
+		}
+		else if (msg.type == CANRemote)
+		{
+			TCS_remoteframe_handler(msg);
+		}
+	}
+}
+
+void TCS_dataframe_handler(CANMessage msg)
+{
+	switch (msg.id)
+	{
+	case libCANCubesat::ADCS_is_stable:
+		MessageAdcsStable::FromCanBus(msg.data, msg.len);
+		break;
+		case libCANCubesat::OBC_orientation_mode_command:
+		MessageAdcsStable::FromCanBus(msg.data, msg.len);
+		break;
+	}
+}
+
+void TCS_remoteframe_handler(CANMessage msg)
 {
 	switch (msg.id)
 	{
