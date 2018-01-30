@@ -7,8 +7,8 @@ RoleMC role;
 
 DigitalIn isobc(A6);
 DigitalIn isadcs(A5);
-DigitalIn istcs(A6);
-DigitalIn isedt(A6);
+DigitalIn istcs(A4);
+DigitalIn isedt(A3);
 
 int main()
 {

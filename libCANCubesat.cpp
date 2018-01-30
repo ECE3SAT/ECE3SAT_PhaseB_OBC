@@ -4,9 +4,11 @@ int counter = 0;
 Serial pc(USBTX, USBRX);
 CAN can1(PA_11, PA_12);
 DigitalOut led1(LED1);
+DigitalOut activityled(A0);
 
 void OBC_read_callback()
 {
+	activityled = 1;	//display we are using cpu
 	pc.printf("OBC_read_callback()\r\n");
 	CANMessage msg;
 	int errorCode;
@@ -31,6 +33,7 @@ void OBC_read_callback()
 			OBC_remoteframe_handler(msg);
 		}
 	}
+	activityled = 0;	//display we stopped to use cpu
 }
 
 void OBC_dataframe_handler(CANMessage msg)
@@ -61,6 +64,7 @@ void OBC_remoteframe_handler(CANMessage msg)
 
 void ADCS_read_callback()
 {
+	activityled = 1;	//display we are using cpu
 	pc.printf("ADCS_read_callback()\r\n");
 	CANMessage msg;
 	int errorCode;
@@ -85,6 +89,7 @@ void ADCS_read_callback()
 			ADCS_remoteframe_handler(msg);
 		}
 	}
+	activityled = 0;	//display we stopped to use cpu
 }
 
 void ADCS_dataframe_handler(CANMessage msg)
@@ -114,6 +119,7 @@ void ADCS_remoteframe_handler(CANMessage msg)
 }
 void EDT_read_callback()
 {
+	activityled = 1;	//display we are using cpu
 	pc.printf("EDT_read_callback()\r\n");
 	CANMessage msg;
 	int errorCode;
@@ -138,6 +144,7 @@ void EDT_read_callback()
 			EDT_remoteframe_handler(msg);
 		}
 	}
+	activityled = 0;	//display we stopped to use cpu
 }
 
 void EDT_dataframe_handler(CANMessage msg)
@@ -167,6 +174,7 @@ void EDT_remoteframe_handler(CANMessage msg)
 }
 void TCS_read_callback()
 {
+	activityled = 1;	//display we are using cpu
 	pc.printf("TCS_read_callback()\r\n");
 	CANMessage msg;
 	int errorCode;
@@ -191,6 +199,7 @@ void TCS_read_callback()
 			TCS_remoteframe_handler(msg);
 		}
 	}
+	activityled = 0;	//display we stopped to use cpu
 }
 
 void TCS_dataframe_handler(CANMessage msg)
@@ -263,17 +272,23 @@ void be_callback()
 
 void send_adcsstable()
 {
+	activityled = 1;	//display we are using cpu
 	asn1SccADCS_is_stable value = TRUE;
 	MessageAdcsStable msg(value);
 	msg.send();
+	activityled = 0;	//display we stopped to use cpu
 }
 
 void send_adcsstable_rtr()
 {
+	activityled = 1;	//display we are using cpu
 	can1.write(CANMessage(1000, CANStandard));
+	activityled = 0;	//display we stopped to use cpu
 }
 
 void send_obcorientationmode()
 {
+	activityled = 1;	//display we are using cpu
 	//TODO
+	activityled = 0;	//display we stopped to use cpu
 }
