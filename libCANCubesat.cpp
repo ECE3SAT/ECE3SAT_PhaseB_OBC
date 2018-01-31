@@ -5,22 +5,16 @@ Serial pc(USBTX, USBRX);
 CAN can1(PA_11, PA_12);
 DigitalOut led1(LED1);
 DigitalOut activityled(A0);
+DigitalOut errorLED(A1);
 
 void OBC_read_callback()
 {
-	activityled = 1;	//display we are using cpu
+	activityled = 1; //display we are using cpu
 	pc.printf("OBC_read_callback()\r\n");
 	CANMessage msg;
-	int errorCode;
-	// 1.Declare a bit stream
-	BitStream bitStrm;
-	// 2.Declare the stuct where the decoded data will be written
 
 	if (can1.read(msg))
 	{
-		// 3.Initialize bit stream
-		BitStream_AttachBuffer(&bitStrm, msg.data, 8);
-
 		led1 = !led1;
 
 		// 4 . Decode data
@@ -33,7 +27,7 @@ void OBC_read_callback()
 			OBC_remoteframe_handler(msg);
 		}
 	}
-	activityled = 0;	//display we stopped to use cpu
+	activityled = 0; //display we stopped to use cpu
 }
 
 void OBC_dataframe_handler(CANMessage msg)
@@ -43,7 +37,7 @@ void OBC_dataframe_handler(CANMessage msg)
 	case libCANCubesat::ADCS_is_stable:
 		MessageAdcsStable::FromCanBus(msg.data, msg.len);
 		break;
-		case libCANCubesat::OBC_orientation_mode_command:
+	case libCANCubesat::OBC_orientation_mode_command:
 		MessageAdcsStable::FromCanBus(msg.data, msg.len);
 		break;
 	}
@@ -64,19 +58,12 @@ void OBC_remoteframe_handler(CANMessage msg)
 
 void ADCS_read_callback()
 {
-	activityled = 1;	//display we are using cpu
+	activityled = 1; //display we are using cpu
 	pc.printf("ADCS_read_callback()\r\n");
 	CANMessage msg;
-	int errorCode;
-	// 1.Declare a bit stream
-	BitStream bitStrm;
-	// 2.Declare the stuct where the decoded data will be written
-
+	
 	if (can1.read(msg))
 	{
-		// 3.Initialize bit stream
-		BitStream_AttachBuffer(&bitStrm, msg.data, 8);
-
 		led1 = !led1;
 
 		// 4 . Decode data
@@ -89,7 +76,7 @@ void ADCS_read_callback()
 			ADCS_remoteframe_handler(msg);
 		}
 	}
-	activityled = 0;	//display we stopped to use cpu
+	activityled = 0; //display we stopped to use cpu
 }
 
 void ADCS_dataframe_handler(CANMessage msg)
@@ -99,7 +86,7 @@ void ADCS_dataframe_handler(CANMessage msg)
 	case libCANCubesat::ADCS_is_stable:
 		MessageAdcsStable::FromCanBus(msg.data, msg.len);
 		break;
-		case libCANCubesat::OBC_orientation_mode_command:
+	case libCANCubesat::OBC_orientation_mode_command:
 		MessageAdcsStable::FromCanBus(msg.data, msg.len);
 		break;
 	}
@@ -119,19 +106,12 @@ void ADCS_remoteframe_handler(CANMessage msg)
 }
 void EDT_read_callback()
 {
-	activityled = 1;	//display we are using cpu
+	activityled = 1; //display we are using cpu
 	pc.printf("EDT_read_callback()\r\n");
 	CANMessage msg;
-	int errorCode;
-	// 1.Declare a bit stream
-	BitStream bitStrm;
-	// 2.Declare the stuct where the decoded data will be written
 
 	if (can1.read(msg))
 	{
-		// 3.Initialize bit stream
-		BitStream_AttachBuffer(&bitStrm, msg.data, 8);
-
 		led1 = !led1;
 
 		// 4 . Decode data
@@ -144,7 +124,7 @@ void EDT_read_callback()
 			EDT_remoteframe_handler(msg);
 		}
 	}
-	activityled = 0;	//display we stopped to use cpu
+	activityled = 0; //display we stopped to use cpu
 }
 
 void EDT_dataframe_handler(CANMessage msg)
@@ -154,7 +134,7 @@ void EDT_dataframe_handler(CANMessage msg)
 	case libCANCubesat::ADCS_is_stable:
 		MessageAdcsStable::FromCanBus(msg.data, msg.len);
 		break;
-		case libCANCubesat::OBC_orientation_mode_command:
+	case libCANCubesat::OBC_orientation_mode_command:
 		MessageAdcsStable::FromCanBus(msg.data, msg.len);
 		break;
 	}
@@ -174,19 +154,12 @@ void EDT_remoteframe_handler(CANMessage msg)
 }
 void TCS_read_callback()
 {
-	activityled = 1;	//display we are using cpu
+	activityled = 1; //display we are using cpu
 	pc.printf("TCS_read_callback()\r\n");
 	CANMessage msg;
-	int errorCode;
-	// 1.Declare a bit stream
-	BitStream bitStrm;
-	// 2.Declare the stuct where the decoded data will be written
 
 	if (can1.read(msg))
 	{
-		// 3.Initialize bit stream
-		BitStream_AttachBuffer(&bitStrm, msg.data, 8);
-
 		led1 = !led1;
 
 		// 4 . Decode data
@@ -199,7 +172,7 @@ void TCS_read_callback()
 			TCS_remoteframe_handler(msg);
 		}
 	}
-	activityled = 0;	//display we stopped to use cpu
+	activityled = 0; //display we stopped to use cpu
 }
 
 void TCS_dataframe_handler(CANMessage msg)
@@ -209,7 +182,7 @@ void TCS_dataframe_handler(CANMessage msg)
 	case libCANCubesat::ADCS_is_stable:
 		MessageAdcsStable::FromCanBus(msg.data, msg.len);
 		break;
-		case libCANCubesat::OBC_orientation_mode_command:
+	case libCANCubesat::OBC_orientation_mode_command:
 		MessageAdcsStable::FromCanBus(msg.data, msg.len);
 		break;
 	}
@@ -230,65 +203,60 @@ void TCS_remoteframe_handler(CANMessage msg)
 
 void transmitted_callback()
 {
-	led1 = !led1;
-	pc.printf("transmitted_callback()\t");
+	pc.printf("transmitted_callback()\r\n");
 }
 
 void errorwarning_callback()
 {
-	led1 = !led1;
-	pc.printf("errorwarning_callback()\t");
+	pc.printf("errorwarning_callback()\r\n");
+	errorLED = !errorLED;
 }
 
 void do_callback()
 {
-	led1 = !led1;
-	pc.printf("do_callback()\t");
+	pc.printf("do_callback()\r\n");
 }
 
 void wakeup_callback()
 {
-	led1 = !led1;
-	pc.printf("wakeup_callback()\t");
+	pc.printf("wakeup_callback()\r\n");
 }
 
 void errorpassive_callback()
 {
-	led1 = !led1;
-	pc.printf("errorpassive_callback()\t");
+	pc.printf("errorpassive_callback()\r\n");
+	errorLED = !errorLED;
 }
 
 void al_callback()
 {
-	led1 = !led1;
-	pc.printf("al_callback()\t");
+	pc.printf("al_callback()\r\n");
 }
 
 void be_callback()
 {
-	led1 = !led1;
-	pc.printf("be_callback()\t");
+	pc.printf("be_callback()\r\n");
 }
 
 void send_adcsstable()
 {
-	activityled = 1;	//display we are using cpu
+	activityled = 1; //display we are using cpu
 	asn1SccADCS_is_stable value = TRUE;
 	MessageAdcsStable msg(value);
 	msg.send();
-	activityled = 0;	//display we stopped to use cpu
+	activityled = 0; //display we stopped to use cpu
 }
 
 void send_adcsstable_rtr()
 {
-	activityled = 1;	//display we are using cpu
+	activityled = 1; //display we are using cpu
 	can1.write(CANMessage(1000, CANStandard));
-	activityled = 0;	//display we stopped to use cpu
+	activityled = 0; //display we stopped to use cpu
 }
 
 void send_obcorientationmode()
 {
-	activityled = 1;	//display we are using cpu
+	activityled = 1; //display we are using cpu
 	//TODO
-	activityled = 0;	//display we stopped to use cpu
+	activityled = 0; //display we stopped to use cpu
 }
