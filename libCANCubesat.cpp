@@ -9,16 +9,9 @@ void read_callback()
 {
 	pc.printf("read_callback()\r\n");
 	CANMessage msg;
-	int errorCode;
-	// 1.Declare a bit stream
-	BitStream bitStrm;
-	// 2.Declare the stuct where the decoded data will be written
 
 	if (can1.read(msg))
 	{
-		// 3.Initialize bit stream
-		BitStream_AttachBuffer(&bitStrm, msg.data, 8);
-
 		led1 = !led1;
 
 		// 4 . Decode data
