@@ -69,6 +69,7 @@ void send_adcsstable_rtr();
 
 void send_obcorientationmode();
 
+void shutdown_sendLED();
 
 
 #endif

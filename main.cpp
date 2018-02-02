@@ -120,7 +120,15 @@ void classadcs_init()
  */
 void classtcs_init()
 {
-	pc.printf("TCS case not implemented!");
+	// when we use the attach function, deep sleep can't be enabled because the CAN device must be able to generate an interruption
+	can1.attach(&TCS_read_callback, CAN::RxIrq);		 // message received
+	can1.attach(&transmitted_callback, CAN::TxIrq);  // message transmitted or aborted
+	can1.attach(&errorwarning_callback, CAN::EwIrq); // error warning
+	can1.attach(&do_callback, CAN::DoIrq);			 // data overrun
+	can1.attach(&wakeup_callback, CAN::WuIrq);		 // wake-up
+	can1.attach(&errorpassive_callback, CAN::EpIrq); // error passive
+	can1.attach(&al_callback, CAN::AlIrq);			 // arbitration lost
+	can1.attach(&be_callback, CAN::BeIrq);			 // bus error
 }
 
 /**
@@ -128,5 +136,13 @@ void classtcs_init()
  */
 void classedt_init()
 {
-	pc.printf("EDT case not implemented!");
+	// when we use the attach function, deep sleep can't be enabled because the CAN device must be able to generate an interruption
+	can1.attach(&EDT_read_callback, CAN::RxIrq);		 // message received
+	can1.attach(&transmitted_callback, CAN::TxIrq);  // message transmitted or aborted
+	can1.attach(&errorwarning_callback, CAN::EwIrq); // error warning
+	can1.attach(&do_callback, CAN::DoIrq);			 // data overrun
+	can1.attach(&wakeup_callback, CAN::WuIrq);		 // wake-up
+	can1.attach(&errorpassive_callback, CAN::EpIrq); // error passive
+	can1.attach(&al_callback, CAN::AlIrq);			 // arbitration lost
+	can1.attach(&be_callback, CAN::BeIrq);			 // bus error
 }

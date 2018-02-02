@@ -2,6 +2,7 @@
 
 int counter = 0;
 Serial pc(USBTX, USBRX);
+Timeout timeout;
 CAN can1(PA_11, PA_12);
 DigitalOut led1(LED1);
 DigitalOut receivedled(A4);
@@ -246,19 +247,23 @@ void send_adcsstable()
 	asn1SccADCS_is_stable value = TRUE;
 	MessageAdcsStable msg(value);
 	msg.send();
-	sendLED = 0; //display we stopped to use cpu
+	timeout.attach(&shutdown_sendLED, 0.5); //display we stopped to use cpu
 }
 
 void send_adcsstable_rtr()
 {
 	sendLED = 1; //display we are using cpu
 	can1.write(CANMessage(1000, CANStandard));
-	sendLED = 0; //display we stopped to use cpu
+	timeout.attach(&shutdown_sendLED, 0.5); //display we stopped to use cpu
 }
 
 void send_obcorientationmode()
 {
 	sendLED = 1; //display we are using cpu
 	//TODO
+	sendLED = 0; //display we stopped to use cpu
+}
+
+void shutdown_sendLED(){
 	sendLED = 0; //display we stopped to use cpu
 }
