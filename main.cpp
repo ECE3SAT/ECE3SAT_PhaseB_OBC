@@ -5,10 +5,9 @@
 Ticker ticker;
 RoleMC role;
 
-DigitalIn isobc(A6);
-DigitalIn isadcs(A5);
-DigitalIn istcs(A4);
-DigitalIn isedt(A3);
+DigitalIn isadcs(A0);
+DigitalIn istcs(A1);
+DigitalIn isedt(A2);
 
 int main()
 {
@@ -44,25 +43,19 @@ int main()
 
 void startup_roledetect()
 {
-	if (isobc.read() == 1 && isadcs.read() == 0 && isedt.read() == 0 && istcs.read() == 0)
-	{
-		//OBC activé
-		role = OBC;
-		pc.printf("OBC activé par defaut\r\n");
-	}
-	else if (isobc.read() == 0 && isadcs.read() == 1 && isedt.read() == 0 && istcs.read() == 0)
+	if (isadcs.read() == 1 && isedt.read() == 0 && istcs.read() == 0)
 	{
 		//ADCS activé
 		role = ADCS;
 		pc.printf("ADCS activé par defaut\r\n");
 	}
-	else if (isobc.read() == 0 && isadcs.read() == 0 && isedt.read() == 1 && istcs.read() == 0)
+	else if (isadcs.read() == 0 && isedt.read() == 1 && istcs.read() == 0)
 	{
 		//EDT activé
 		role = EDT;
 		pc.printf("EDT activé par defaut\r\n");
 	}
-	else if (isobc.read() == 0 && isadcs.read() == 0 && isedt.read() == 0 && istcs.read() == 1)
+	else if (isadcs.read() == 0 && isedt.read() == 0 && istcs.read() == 1)
 	{
 		//TCS activé
 		role = TCS;
@@ -109,7 +102,17 @@ void classobc_init()
  */
 void classadcs_init()
 {
-	pc.printf("ADCS case not implemented!");
+	ticker.attach(&send_adcsstable, 2);
+
+	// when we use the attach function, deep sleep can't be enabled because the CAN device must be able to generate an interruption
+	can1.attach(&ADCS_read_callback, CAN::RxIrq);		 // message received
+	can1.attach(&transmitted_callback, CAN::TxIrq);  // message transmitted or aborted
+	can1.attach(&errorwarning_callback, CAN::EwIrq); // error warning
+	can1.attach(&do_callback, CAN::DoIrq);			 // data overrun
+	can1.attach(&wakeup_callback, CAN::WuIrq);		 // wake-up
+	can1.attach(&errorpassive_callback, CAN::EpIrq); // error passive
+	can1.attach(&al_callback, CAN::AlIrq);			 // arbitration lost
+	can1.attach(&be_callback, CAN::BeIrq);			 // bus error
 }
 
 /**
