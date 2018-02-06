@@ -9,6 +9,7 @@ extern "C" {
 
 void PrintOBC_profileTCS(const char *paramName, const asn1SccOBC_profileTCS *pData);
 void PrintOBC_orientation_mode_command(const char *paramName, const asn1SccOBC_orientation_mode_command *pData);
+void PrintOBC_mission_phase(const char *paramName, const asn1SccOBC_mission_phase *pData);
 void PrintTASTE_Boolean(const char *paramName, const asn1SccTASTE_Boolean *pData);
 void PrintT_Boolean(const char *paramName, const asn1SccT_Boolean *pData);
 void PrintT_UInt32(const char *paramName, const asn1SccT_UInt32 *pData);

@@ -172,3 +172,27 @@ void PrintASN1OBC_orientation_mode_command(const char *paramName, const asn1SccO
 #endif
 }
 
+void PrintASN1OBC_mission_phase(const char *paramName, const asn1SccOBC_mission_phase *pData)
+{
+#ifdef __linux__
+    pthread_mutex_lock(&g_printing_mutex);
+#endif
+    //printf("%s OBC-mission-phase ::= ", paramName);
+    printf("%s ", paramName);
+    switch((*pData)) {
+    case 0:
+        printf("phase-detumbling");
+        break;
+    case 1:
+        printf("phase-charging");
+        break;
+    case 2:
+        printf("phase-deorbiting");
+        break;
+    default:
+        printf("Invalid value in ENUMERATED ((*pData))");
+    }
+#ifdef __linux__
+    pthread_mutex_unlock(&g_printing_mutex);
+#endif
+}

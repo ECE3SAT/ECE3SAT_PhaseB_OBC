@@ -79,6 +79,27 @@ flag asn1SccOBC_profileTCS_IsConstraintValid(const asn1SccOBC_profileTCS* val, i
 #define ERR_asn1SccOBC_profileTCS		1003  /**/
 #endif
 
+typedef enum {
+    asn1Sccphase_detumbling = 0,
+    asn1Sccphase_charging = 1,
+    asn1Sccphase_deorbiting = 2
+} asn1SccOBC_mission_phase;
+
+#define asn1SccOBC_mission_phase_REQUIRED_BYTES_FOR_ENCODING       1 
+#define asn1SccOBC_mission_phase_REQUIRED_BITS_FOR_ENCODING        2
+#define asn1SccOBC_mission_phase_REQUIRED_BYTES_FOR_ACN_ENCODING   1 
+#define asn1SccOBC_mission_phase_REQUIRED_BITS_FOR_ACN_ENCODING    2
+#define asn1SccOBC_mission_phase_REQUIRED_BYTES_FOR_XER_ENCODING   74
+
+void asn1SccOBC_mission_phase_Initialize(asn1SccOBC_mission_phase* pVal);
+flag asn1SccOBC_mission_phase_IsConstraintValid(const asn1SccOBC_mission_phase* val, int* pErrCode);
+#ifndef ERR_asn1SccOBC_mission_phase_unknown_enumeration_value 
+#define ERR_asn1SccOBC_mission_phase_unknown_enumeration_value		1002  /**/
+#endif
+#ifndef ERR_asn1SccOBC_mission_phase 
+#define ERR_asn1SccOBC_mission_phase		1001  /**/
+#endif
+
 typedef asn1SccSint asn1SccT_Int32;
 
 #define asn1SccT_Int32_REQUIRED_BYTES_FOR_ENCODING       4 
@@ -170,6 +191,10 @@ flag asn1SccOBC_profileTCS_Encode(const asn1SccOBC_profileTCS* val, BitStream* p
 flag asn1SccOBC_profileTCS_Decode(asn1SccOBC_profileTCS* pVal, BitStream* pBitStrm, int* pErrCode);
 flag asn1SccOBC_profileTCS_ACN_Encode(const asn1SccOBC_profileTCS* val, BitStream* pBitStrm, int* pErrCode, flag bCheckConstraints);
 flag asn1SccOBC_profileTCS_ACN_Decode(asn1SccOBC_profileTCS* pVal, BitStream* pBitStrm, int* pErrCode);
+flag asn1SccOBC_mission_phase_Encode(const asn1SccOBC_mission_phase* val, BitStream* pBitStrm, int* pErrCode, flag bCheckConstraints);
+flag asn1SccOBC_mission_phase_Decode(asn1SccOBC_mission_phase* pVal, BitStream* pBitStrm, int* pErrCode);
+flag asn1SccOBC_mission_phase_ACN_Encode(const asn1SccOBC_mission_phase* val, BitStream* pBitStrm, int* pErrCode, flag bCheckConstraints);
+flag asn1SccOBC_mission_phase_ACN_Decode(asn1SccOBC_mission_phase* pVal, BitStream* pBitStrm, int* pErrCode);
 flag asn1SccT_Int32_Encode(const asn1SccT_Int32* val, BitStream* pBitStrm, int* pErrCode, flag bCheckConstraints);
 flag asn1SccT_Int32_Decode(asn1SccT_Int32* pVal, BitStream* pBitStrm, int* pErrCode);
 flag asn1SccT_Int32_ACN_Encode(const asn1SccT_Int32* val, BitStream* pBitStrm, int* pErrCode, flag bCheckConstraints);
@@ -202,6 +227,9 @@ flag asn1SccT_Boolean_ACN_Decode(asn1SccT_Boolean* pVal, BitStream* pBitStrm, in
 #define ENUM_asn1Sccshutdown	asn1Sccshutdown
 #define ENUM_asn1Sccfull	asn1Sccfull
 #define ENUM_asn1Scclowpower	asn1Scclowpower
+#define ENUM_asn1Sccdetumbling	asn1Sccdetumbling
+#define ENUM_asn1Scccharging	asn1Scccharging
+#define ENUM_asn1Sccdeorbiting	asn1Sccdeorbiting
 
 #endif
 

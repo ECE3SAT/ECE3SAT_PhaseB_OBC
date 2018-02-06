@@ -31,6 +31,17 @@ void PrintOBC_orientation_mode_command(const char *paramName, const asn1SccOBC_o
 #endif
 }
 
+void PrintOBC_mission_phase(const char *paramName, const asn1SccOBC_mission_phase *pData)
+{
+#ifdef __linux__
+    pthread_mutex_lock(&g_printing_mutex);
+#endif
+    printf("%s %d\n", paramName, (int)(*pData));
+#ifdef __linux__
+    pthread_mutex_unlock(&g_printing_mutex);
+#endif
+}
+
 void PrintTASTE_Boolean(const char *paramName, const asn1SccTASTE_Boolean *pData)
 {
 #ifdef __linux__

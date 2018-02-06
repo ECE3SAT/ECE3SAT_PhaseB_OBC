@@ -16,6 +16,7 @@ void PrintASN1TASTE_Boolean(const char *paramName, const asn1SccTASTE_Boolean *p
 void PrintASN1ADCS_is_stable(const char *paramName, const asn1SccADCS_is_stable *pData);
 void PrintASN1T_Boolean(const char *paramName, const asn1SccT_Boolean *pData);
 void PrintASN1OBC_orientation_mode_command(const char *paramName, const asn1SccOBC_orientation_mode_command *pData);
+void PrintASN1OBC_mission_phase(const char *paramName, const asn1SccOBC_mission_phase *pData);
 
 #ifdef __cplusplus
 }

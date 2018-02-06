@@ -424,13 +424,141 @@ flag asn1SccOBC_profileTCS_ACN_Decode(asn1SccOBC_profileTCS* pVal, BitStream* pB
     }
     return ret;
 }
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1800
+void asn1SccOBC_mission_phase_Initialize(asn1SccOBC_mission_phase* pVal)
+{
+    *pVal = (asn1SccOBC_mission_phase) asn1Sccphase_detumbling;
+}
+#endif
+
+ 
+flag asn1SccOBC_mission_phase_IsConstraintValid(const asn1SccOBC_mission_phase* pVal, int* pErrCode)
+{
+    
+    flag ret = TRUE;
+	*pErrCode=0;
+
+	(void)pVal;
+
+	ret = (((*pVal == asn1Sccphase_detumbling) || (*pVal == asn1Sccphase_charging)) || (*pVal == asn1Sccphase_deorbiting));
+	*pErrCode = ret ? 0 : ERR_asn1SccOBC_mission_phase;
+
+	return ret;
+}
+
+flag asn1SccOBC_mission_phase_Encode(const asn1SccOBC_mission_phase* pVal, BitStream* pBitStrm, int* pErrCode, flag bCheckConstraints)
+{
+    flag ret = TRUE;
+    
+	ret = bCheckConstraints ? asn1SccOBC_mission_phase_IsConstraintValid(pVal, pErrCode) : TRUE ;
+	if (ret) {
+	    switch(*pVal) 
+	    {
+	        case asn1Sccphase_detumbling:   
+	            BitStream_EncodeConstraintWholeNumber(pBitStrm, 0, 0, 2);
+	        	break;
+	        case asn1Sccphase_charging:   
+	            BitStream_EncodeConstraintWholeNumber(pBitStrm, 1, 0, 2);
+	        	break;
+	        case asn1Sccphase_deorbiting:   
+	            BitStream_EncodeConstraintWholeNumber(pBitStrm, 2, 0, 2);
+	        	break;
+	        default:
+	    	    *pErrCode = 1073741825; //COVERAGE_IGNORE
+	    	    ret = FALSE;            //COVERAGE_IGNORE
+	    }
+    }
+
+	return ret;
+}
+
+flag asn1SccOBC_mission_phase_Decode(asn1SccOBC_mission_phase* pVal, BitStream* pBitStrm, int* pErrCode)
+{
+    flag ret = TRUE;
+	asn1SccSint enumIndex;
+
+	ret = BitStream_DecodeConstraintWholeNumber(pBitStrm, &enumIndex, 0, 2);
+	*pErrCode = ret ? 0 : 268435459;
+	if (ret) {
+	    switch(enumIndex) 
+	    {
+	        case 0: 
+	            *pVal = asn1Sccphase_detumbling;
+	            break;
+	        case 1: 
+	            *pVal = asn1Sccphase_charging;
+	            break;
+	        case 2: 
+	            *pVal = asn1Sccphase_deorbiting;
+	            break;
+	        default:
+		        *pErrCode = 1073741826;     //COVERAGE_IGNORE
+		        ret = FALSE;                //COVERAGE_IGNORE
+	    }
+	}
+
+	return ret;
+}
+
+flag asn1SccOBC_mission_phase_ACN_Encode(const asn1SccOBC_mission_phase* pVal, BitStream* pBitStrm, int* pErrCode, flag bCheckConstraints)
+{
+    flag ret = TRUE;
+    asn1SccUint intVal = 0;
+
+    ret = bCheckConstraints ? asn1SccOBC_mission_phase_IsConstraintValid(pVal, pErrCode) : TRUE ;
+	if (ret) {
+	    switch(*pVal) { 
+	        case asn1Sccphase_detumbling:
+	            intVal = 0;
+	            break;
+	        case asn1Sccphase_charging:
+	            intVal = 1;
+	            break;
+	        case asn1Sccphase_deorbiting:
+	            intVal = 2;
+	            break;
+	        default:
+	            ret = FALSE;                            //COVERAGE_IGNORE
+	            *pErrCode = 1073741827;      //COVERAGE_IGNORE
+	    }
+	    BitStream_EncodeConstraintPosWholeNumber(pBitStrm, intVal, 0, 2);
+    }
+
+	return ret;
+}
+
+flag asn1SccOBC_mission_phase_ACN_Decode(asn1SccOBC_mission_phase* pVal, BitStream* pBitStrm, int* pErrCode)
+{
+    flag ret = TRUE;
+    asn1SccUint intVal = 0;
+    ret = BitStream_DecodeConstraintPosWholeNumber(pBitStrm, &intVal, 0, 2);
+    *pErrCode = ret ? 0 : 268435460;
+    if (ret) {
+        switch (intVal) {
+            case 0:
+                *pVal = asn1Sccphase_detumbling;
+                break;
+            case 1:
+                *pVal = asn1Sccphase_charging;
+                break;
+            case 2:
+                *pVal = asn1Sccphase_deorbiting;
+                break;
+        default:
+            ret = FALSE;                            //COVERAGE_IGNORE
+            *pErrCode = 1073741828;      //COVERAGE_IGNORE
+        };
+    }
+    return ret;
+}
+
 #if !defined(_MSC_VER) || _MSC_VER >= 1800
 void asn1SccT_Int32_Initialize(asn1SccT_Int32* pVal)
 {
     *pVal = (asn1SccT_Int32) -2147483648LL;
 }
 #endif
-
  
 flag asn1SccT_Int32_IsConstraintValid(const asn1SccT_Int32* pVal, int* pErrCode)
 {
