@@ -4,15 +4,22 @@
 
 Ticker ticker;
 RoleMC role;
+int mode;
 
 DigitalIn isadcs(A0);
 DigitalIn istcs(A1);
 DigitalIn isedt(A2);
+DigitalIn modeflood(A3);
 
 int main()
 {
+	pc.baud(115200);	//CAN baudrate setup
+	set_time(1256729737);  // Set RTC time to Wed, 28 Oct 2009 11:35:37
+
 	//detect which role this card has to play
 	startup_roledetect();
+	//detect if mode flood is activated
+	startup_modedetect();
 
 	switch (role)
 	{
@@ -41,6 +48,9 @@ int main()
 	}
 }
 
+/**
+ * Detecte le rôle de chaque carte au demarrage selon la pin alimentée
+ */
 void startup_roledetect()
 {
 	if (isadcs.read() == 1 && isedt.read() == 0 && istcs.read() == 0)
@@ -70,7 +80,27 @@ void startup_roledetect()
 }
 
 /**
- * TODO
+ * le mode flood sert à activer l'emission de messages sur toutes les cartes afin de spammer le bus can.
+ */
+void startup_modedetect()
+{
+	if (modeflood.read() == 1 )
+	{
+		//mode flood activé
+		mode = 1;
+		pc.printf("FLOOD activé\r\n");
+	}
+	else
+	{
+		//mode flood désactivé
+		mode = 0;
+		pc.printf("FLOOD désactivé\r\n");
+	}
+}
+
+/**
+ * Initialise la carte pour qu'elle joue le role de l'obc.
+ * Ajoutez ici les comportements specifiques à ce module.
  */
 void classobc_init()
 {
@@ -95,10 +125,17 @@ void classobc_init()
 	can1.attach(&errorpassive_callback, CAN::EpIrq); // error passive
 	can1.attach(&al_callback, CAN::AlIrq);			 // arbitration lost
 	can1.attach(&be_callback, CAN::BeIrq);			 // bus error
+
+	if(mode)
+	{
+		ticker.attach(&send_lowpriorityframe42, 2);
+		can1.attach(0, CAN::RxIrq);		 // disable read callback in this mode to spam more
+	}
 }
 
 /**
- * TODO
+ * Initialise la carte pour qu'elle joue le role de l'adcs.
+ * Ajoutez ici les comportements specifiques à ce module.
  */
 void classadcs_init()
 {
@@ -113,10 +150,17 @@ void classadcs_init()
 	can1.attach(&errorpassive_callback, CAN::EpIrq); // error passive
 	can1.attach(&al_callback, CAN::AlIrq);			 // arbitration lost
 	can1.attach(&be_callback, CAN::BeIrq);			 // bus error
+
+	if(mode)
+	{
+		ticker.attach(&send_midpriorityframe20, 0.002);
+		can1.attach(0, CAN::RxIrq);		 // disable read callback in this mode to spam more
+	}
 }
 
 /**
- * TODO
+ * Initialise la carte pour qu'elle joue le role de tcs.
+ * Ajoutez ici les comportements specifiques à ce module.
  */
 void classtcs_init()
 {
@@ -129,10 +173,17 @@ void classtcs_init()
 	can1.attach(&errorpassive_callback, CAN::EpIrq); // error passive
 	can1.attach(&al_callback, CAN::AlIrq);			 // arbitration lost
 	can1.attach(&be_callback, CAN::BeIrq);			 // bus error
+
+	if(mode)
+	{
+		ticker.attach(&send_highpriorityframe10, 1);
+		can1.attach(0, CAN::RxIrq);		 // disable read callback in this mode to spam more
+	}
 }
 
 /**
- * TODO
+ * Initialise la carte pour qu'elle joue le role de l'edt.
+ * Ajoutez ici les comportements specifiques à ce module.
  */
 void classedt_init()
 {
@@ -145,4 +196,10 @@ void classedt_init()
 	can1.attach(&errorpassive_callback, CAN::EpIrq); // error passive
 	can1.attach(&al_callback, CAN::AlIrq);			 // arbitration lost
 	can1.attach(&be_callback, CAN::BeIrq);			 // bus error
+
+	if(mode)
+	{
+		ticker.attach(&send_midpriorityframe30, 0.002);
+		can1.attach(0, CAN::RxIrq);		 // disable read callback in this mode to spam more
+	}
 }

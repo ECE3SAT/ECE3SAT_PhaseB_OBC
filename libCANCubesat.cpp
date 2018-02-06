@@ -12,7 +12,7 @@ DigitalOut errorLED(A6);
 void OBC_read_callback()
 {
 	receivedled = 1; //display we are using cpu
-	pc.printf("OBC_read_callback()\r\n");
+	pc.printf("OBC_rc()\r\n");
 	CANMessage msg;
 
 	if (can1.read(msg))
@@ -61,9 +61,9 @@ void OBC_remoteframe_handler(CANMessage msg)
 void ADCS_read_callback()
 {
 	receivedled = 1; //display we are using cpu
-	pc.printf("ADCS_read_callback()\r\n");
+	pc.printf("ADCS_rc()\r\n");
 	CANMessage msg;
-	
+
 	if (can1.read(msg))
 	{
 		led1 = !led1;
@@ -109,7 +109,7 @@ void ADCS_remoteframe_handler(CANMessage msg)
 void EDT_read_callback()
 {
 	receivedled = 1; //display we are using cpu
-	pc.printf("EDT_read_callback()\r\n");
+	pc.printf("EDT_rc()\r\n");
 	CANMessage msg;
 
 	if (can1.read(msg))
@@ -146,18 +146,15 @@ void EDT_remoteframe_handler(CANMessage msg)
 {
 	switch (msg.id)
 	{
-	case libCANCubesat::ADCS_is_stable:
-		send_adcsstable();
-		break;
-	case libCANCubesat::OBC_orientation_mode_command:
-		send_obcorientationmode();
+	default:
+		//nothing
 		break;
 	}
 }
 void TCS_read_callback()
 {
 	receivedled = 1; //display we are using cpu
-	pc.printf("TCS_read_callback()\r\n");
+	pc.printf("TCS_rc()\r\n");
 	CANMessage msg;
 
 	if (can1.read(msg))
@@ -194,19 +191,16 @@ void TCS_remoteframe_handler(CANMessage msg)
 {
 	switch (msg.id)
 	{
-	case libCANCubesat::ADCS_is_stable:
-		send_adcsstable();
-		break;
-	case libCANCubesat::OBC_orientation_mode_command:
-		send_obcorientationmode();
+	default:
+		//nothing
 		break;
 	}
 }
 
 void transmitted_callback()
 {
-	pc.printf("transmitted_callback()\r\n");
-	errorLED = 0;	//eteindre la LED d'erreur
+	pc.printf("tc()\r\n");
+	errorLED = 0; //eteindre la LED d'erreur
 }
 
 void errorwarning_callback()
@@ -247,7 +241,7 @@ void send_adcsstable()
 	asn1SccADCS_is_stable value = TRUE;
 	MessageAdcsStable msg(value);
 	msg.send();
-	timeout.attach(&shutdown_sendLED, 0.5); //display we stopped to use cpu
+	timeout.attach(&shutdown_sendLED, 0.2); //display we stopped to use cpu
 }
 
 void send_adcsstable_rtr()
@@ -264,6 +258,36 @@ void send_obcorientationmode()
 	sendLED = 0; //display we stopped to use cpu
 }
 
-void shutdown_sendLED(){
+void send_highpriorityframe10()
+{
+	sendLED = 1; //display we are using cpu
+	char data = 4;
+	can1.write(CANMessage(10, &data, (char)8, CANData, CANStandard));
+	timeout.attach(&shutdown_sendLED, 0.2); //display we stopped to use cpu
+}
+void send_midpriorityframe20()
+{
+	sendLED = 1; //display we are using cpu
+	char data = 4;
+	can1.write(CANMessage(20, &data, (char)8, CANData, CANStandard));
+	timeout.attach(&shutdown_sendLED, 0.2); //display we stopped to use cpu
+}
+void send_midpriorityframe30()
+{
+	sendLED = 1; //display we are using cpu
+	char data = 4;
+	can1.write(CANMessage(30, &data, (char)8, CANData, CANStandard));
+	timeout.attach(&shutdown_sendLED, 0.2); //display we stopped to use cpu
+}
+void send_lowpriorityframe42()
+{
+	sendLED = 1; //display we are using cpu
+	char data = 4;
+	can1.write(CANMessage(42, &data, (char)8, CANData, CANStandard));
+	timeout.attach(&shutdown_sendLED, 0.2); //display we stopped to use cpu
+}
+
+void shutdown_sendLED()
+{
 	sendLED = 0; //display we stopped to use cpu
 }

@@ -62,12 +62,18 @@ void errorpassive_callback();
 void al_callback();
 
 void be_callback();
+void resetcanbus();
 
 void send_adcsstable();
 
 void send_adcsstable_rtr();
 
 void send_obcorientationmode();
+
+void send_highpriorityframe10();
+void send_midpriorityframe20();
+void send_midpriorityframe30();
+void send_lowpriorityframe42();
 
 void shutdown_sendLED();
 
