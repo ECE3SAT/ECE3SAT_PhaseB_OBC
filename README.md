@@ -9,6 +9,21 @@ This code has been written for STM32 Nucleo L432KC.
 
 You need to have an installed and configured [MbedCLI](https://os.mbed.com/docs/v5.7/tools/arm-mbed-cli.html).
 
+### Windows
+
+Follow [instructions](https://os.mbed.com/docs/v5.7/tools/installing-with-the-windows-installer.html) : download and execute the installer. Notice that it includes the GNU Arm Embedded Toolchain.
+
+Don't forget to [configure Mbed CLI](https://os.mbed.com/docs/v5.7/tools/configuring-mbed-cli.html) by setting PATH variables and toolchain selection.
+
+### Linux (or Bash on Ubuntu on Windows)
+
+Before installing mbed-cli we need some [requirements](https://os.mbed.com/docs/v5.7/tools/requirements.html) : python and git.
+
+Install the latest version of mbed-cli :
+
+`pip install mbed-cli`
+
+Don't forget to [configure Mbed CLI](https://os.mbed.com/docs/v5.7/tools/configuring-mbed-cli.html) by setting PATH variables and toolchain selection. In next parts we used GNU Arm Embedded toolchain (GCC) version 6 that explain the variable GCC_ARM.
 
 ## Installation
 
