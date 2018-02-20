@@ -5,16 +5,20 @@ Serial pc(USBTX, USBRX);
 CAN can1(PA_11, PA_12);
 DigitalOut led1(LED1);
 
+/**
+ * La read_callback est executée à la reception d'une frame CAN valide, grâce à une interruption.
+ */
 void read_callback()
 {
 	pc.printf("read_callback()\r\n");
 	CANMessage msg;
 
+//on lit le message CAN recu
 	if (can1.read(msg))
 	{
 		led1 = !led1;
 
-		// 4 . Decode data
+		/* il existe 2 types de frames CAN : les CANData et les CANRemote. */
 		if (msg.type == CANData)
 		{
 			dataframe_handler(msg);
@@ -26,6 +30,9 @@ void read_callback()
 	}
 }
 
+/**
+ * Les frames CANData transportent des données. On traite les données recues.
+ */
 void dataframe_handler(CANMessage msg)
 {
 	switch (msg.id)
@@ -39,6 +46,9 @@ void dataframe_handler(CANMessage msg)
 	}
 }
 
+/**
+ * Les CANRemote sont des demandes d'émissions : on répond à cette demande si on est responsable de la donnée.
+ */
 void remoteframe_handler(CANMessage msg)
 {
 	switch (msg.id)
@@ -52,6 +62,9 @@ void remoteframe_handler(CANMessage msg)
 	}
 }
 
+/**
+ * Callback de d'emission ou de tentative d'emission de message CAN
+ */
 void transmitted_callback()
 {
 	led1 = !led1;
