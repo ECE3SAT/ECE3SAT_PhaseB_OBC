@@ -9,17 +9,22 @@ DigitalOut receivedled(A4);
 DigitalOut sendLED(A5);
 DigitalOut errorLED(A6);
 
+/**
+ * La read_callback est executée à la reception d'une frame CAN valide, grâce à une interruption.
+ */
 void OBC_read_callback()
 {
 	receivedled = 1; //display we are using cpu
 	pc.printf("OBC_rc()\r\n");
 	CANMessage msg;
 
+	//on lit le message CAN recu
 	if (can1.read(msg))
 	{
 		led1 = !led1;
 
-		// 4 . Decode data
+		/* il existe 2 types de frames CAN : les CANData et les CANRemote.
+		 */
 		if (msg.type == CANData)
 		{
 			OBC_dataframe_handler(msg);
@@ -32,6 +37,9 @@ void OBC_read_callback()
 	receivedled = 0; //display we stopped to use cpu
 }
 
+/**
+ * Les frames CANData transportent des données. On traite les données recues.
+ */
 void OBC_dataframe_handler(CANMessage msg)
 {
 	switch (msg.id)
@@ -45,6 +53,9 @@ void OBC_dataframe_handler(CANMessage msg)
 	}
 }
 
+/**
+ * Les CANRemote sont des demandes d'émissions : on répond à cette demande si on est responsable de la donnée.
+ */
 void OBC_remoteframe_handler(CANMessage msg)
 {
 	switch (msg.id)
